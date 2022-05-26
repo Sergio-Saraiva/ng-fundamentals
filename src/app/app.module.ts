@@ -2,28 +2,38 @@ import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import { RouterModule } from '@angular/router';
-import { CollapsibleWellComponent } from './common/collapsible-well.component';
-import { Toastr, TOASTR_TOKEN } from './common/toastr.service';
+import {
+  Toastr,
+  TOASTR_TOKEN,
+  CollapsibleWellComponent,
+  SimpleModalComponent,
+  JQ_TOKEN,
+  ModalTriggerDirective,
+} from './common';
 import { Error404Component } from './errors/404.component';
 import { EventsAppComponent } from './events-app.component';
-
+import { HttpClientModule } from '@angular/common/http';
 import {
   EventsListComponent,
   EventThumbnailComponent,
   EventDetailsComponent,
   CreateEventComponent,
   EventService,
-  EventRouterActivator,
   EventsListResolver,
   CreateSessionComponent,
   SessionListComponent,
   DurationPipe,
+  UpvoteComponent,
+  VoterService,
+  LocationValidator,
+  EventResolver,
 } from './events/index';
 import { NavbarComponent } from './nav/navbar.component';
 import { routes } from './routes';
 import { AuthService } from './user/auth.service';
 
-declare let toastr: Toastr;
+let toastr: Toastr = window['toastr'];
+let jQuery = window['$'];
 
 @NgModule({
   imports: [
@@ -31,6 +41,7 @@ declare let toastr: Toastr;
     RouterModule.forRoot(routes),
     FormsModule,
     ReactiveFormsModule,
+    HttpClientModule,
   ],
   declarations: [
     EventsAppComponent,
@@ -44,16 +55,22 @@ declare let toastr: Toastr;
     SessionListComponent,
     CollapsibleWellComponent,
     DurationPipe,
+    SimpleModalComponent,
+    ModalTriggerDirective,
+    UpvoteComponent,
+    LocationValidator,
   ],
   bootstrap: [EventsAppComponent],
 
   providers: [
     EventService,
     { provide: TOASTR_TOKEN, useValue: toastr },
-    EventRouterActivator,
+    { provide: JQ_TOKEN, useValue: jQuery },
     EventsListResolver,
     AuthService,
     { provide: 'canDeactivateCreateEvent', useValue: checkDirtyState },
+    VoterService,
+    EventResolver,
   ],
 })
 export class AppModule {}

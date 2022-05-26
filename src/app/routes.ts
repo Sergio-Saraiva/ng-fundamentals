@@ -4,7 +4,7 @@ import {
   CreateEventComponent,
   CreateSessionComponent,
   EventDetailsComponent,
-  EventRouterActivator,
+  EventResolver,
   EventsListComponent,
   EventsListResolver,
 } from './events';
@@ -23,7 +23,7 @@ export const routes: Routes = [
   {
     path: 'events/:id',
     component: EventDetailsComponent,
-    canActivate: [EventRouterActivator],
+    resolve: { event: EventResolver },
   },
   {
     path: 'events/session/new',
